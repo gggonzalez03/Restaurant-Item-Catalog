@@ -2,39 +2,37 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import re
 import os
 import cgi
-
-import requests
 import restaurant_queries
 import subprocess
 
 
 class webServerHandler(BaseHTTPRequestHandler):
-
     def do_GET(self):
         try:
             if self.path.endswith("/restaurant"):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
-                output = "<!DOCTYPE html><html><head><title>Restaurants</title></head><body>"
+                output = "<html><head><title>Restaurants</title></head><body>"
                 for restaurant in restaurant_queries.get_all_restaurants():
-                    output += "<h2>%s</h2><a href='/restaurant/rename'>Edit</a><br><a href='/restaurant/delete'>Delete</a>" % (restaurant.name)
+                    output += "<h2>%s</h2><a href='/restaurant/%s/edit'>Edit</a><br><a href='/restaurant/%s/delete'>Delete</a>" % (
+                        restaurant.name, restaurant.id, restaurant.id)
                 output += "<br><br><br><a href='/restaurant/new'>Add a new restaurant</a></body></html>"
                 self.wfile.write(output)
-                print output
                 return
 
-            if self.path.endswith("/restaurant/delete"):
+            if self.path.endswith("/delete"):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
+                restaurant_id = self.path.split('/')[2]
                 output = ""
                 output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant'>'''
                 output += '''<h2>Are you sure you want to delete this restaurant?</h2><input type="hidden" name="purpose" value="delete">'''
+                output += '''<input type="hidden" name="restid" value="%s">''' % restaurant_id
                 output += '''<input type="submit" name="yesorno" value="Yes">'''
                 output += '''<input type="submit" name="yesorno" value="No"></form>'''
                 self.wfile.write(output)
-                print output
                 return
             if self.path.endswith("/restaurant/new"):
                 self.send_response(200)
@@ -46,19 +44,19 @@ class webServerHandler(BaseHTTPRequestHandler):
                 output += '''<input name="newrestaurantname" type="text" >'''
                 output += '''<input type="submit" value="Create"></form>'''
                 self.wfile.write(output)
-                print output
                 return
-            if self.path.endswith("/restaurant/rename"):
+            if self.path.endswith("/edit"):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
+                restaurant_id = self.path.split('/')[2]
                 output = ""
                 output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant'>'''
-                output += '''<h2>What's the new name of your restaurant</h2><input type="hidden" name="purpose" value="rename">'''
-                output += '''<input name="newrestaurantname" type="text" >'''
-                output += '''<input type="submit" value="Rename"></form>'''
+                output += '''<h2>What's the new name of your restaurant</h2><input type="hidden" name="purpose" value="edit">'''
+                output += "<input type='hidden' name='restid' value='%s'>" % restaurant_id
+                output += '''<input name="newrestaurantname" type="text">'''
+                output += '''<input type="submit" value="Edit"></form>'''
                 self.wfile.write(output)
-                print output
                 return
 
         except IOError:
@@ -66,9 +64,6 @@ class webServerHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            self.send_response(301)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
             ctype, pdict = cgi.parse_header(
                 self.headers.getheader('content-type'))
             if ctype == 'multipart/form-data':
@@ -78,20 +73,37 @@ class webServerHandler(BaseHTTPRequestHandler):
                     if purpose[0] == "add" and isinstance(purpose[0], str):
                         new_restaurant_name = fields.get("newrestaurantname")
                         restaurant_queries.add_restaurant(new_restaurant_name[0])
-                        self.wfile.write(new_restaurant_name)
-                    elif purpose[0] == "delete" and isinstance(purpose[0], str):
-                        # restaurant_queries.delete_a_restaurant(restaurant_id)
-                        # delete_id = fields.get("deleteid")
-                        # yes_or_no = fields.get("yesorno")
-                        # print(yes_or_no)
-                        pass
-                    elif purpose[0] == "rename" and isinstance(purpose[0], str):
-                        # restaurant_queries.rename_a_restaurant(restaurant_id, restaurant_new_name)
-                        pass
 
-                print purpose[0], type(purpose[0])
+                        # this will redirect to the /restaurant page
+                        self.redirect_to_url("/restaurant")
+                        return
+                    elif purpose[0] == "delete" and isinstance(purpose[0], str):
+                        restaurant_id = fields.get("restid")
+                        yes_or_no = fields.get("yesorno")
+                        if yes_or_no[0] == "Yes":
+                            restaurant_queries.delete_a_restaurant(int(restaurant_id[0]))
+                        self.redirect_to_url("/restaurant")
+                    elif purpose[0] == "edit" and isinstance(purpose[0], str):
+                        restaurant_id = fields.get("restid")
+                        new_restaurant_name = fields.get("newrestaurantname")
+                        restaurant_queries.rename_a_restaurant(int(restaurant_id[0]), new_restaurant_name[0])
+
+                        self.redirect_to_url("/restaurant")
         except:
             pass
+
+    def redirect_to_url(self, url):
+        self.send_response(301)
+        self.send_header('Content-type', 'text/html')
+        self.send_header('Location', url)
+        self.end_headers()
+
+
+def redirect_to_url(self, url):
+    self.send_response(301)
+    self.send_header('Content-type', 'text/html')
+    self.send_header('Location', url)
+    self.end_headers()
 
 
 def get_pids(port):
@@ -105,6 +117,7 @@ def get_pids(port):
                 yield int(pid)
             except:
                 pass
+
 
 def main():
     try:
@@ -121,6 +134,7 @@ def main():
         pids = set(get_pids(port))
         command = 'kill -9 {}'.format(' '.join([str(pid) for pid in pids]))
         os.system(command)
+
 
 if __name__ == '__main__':
     main()

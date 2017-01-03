@@ -14,6 +14,7 @@ DBSession = sessionmaker(bind=engine)
 
 session = DBSession()
 
+
 # functions to interact with restaurant table
 # create functions
 def add_restaurant(restaurant_name):
@@ -28,6 +29,7 @@ def add_restaurant(restaurant_name):
     else:
         raise TypeError("Restaurant name must be of type String")
 
+
 # read functions
 def get_all_restaurants():
     """This will return all the rows in the
@@ -36,17 +38,20 @@ def get_all_restaurants():
     """
     return session.query(Restaurant).all()
 
+
 # update functions
 def rename_a_restaurant(restaurant_id, restaurant_new_name):
     """This will update the name of the given
     restaurant
+    :param restaurant_new_name: New name to be set for the restaurant
     :param restaurant_id: Id of the restaurant being renamed
     :return: None
     """
-    to_rename_restaurant = session.query(Restaurant).filter_by(id=restaurant_id)
+    to_rename_restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
     to_rename_restaurant.name = restaurant_new_name
     session.add(to_rename_restaurant)
     session.commit()
+
 
 # delete functions
 def delete_a_restaurant(restaurant_id):
@@ -56,16 +61,18 @@ def delete_a_restaurant(restaurant_id):
     :return: none
     """
     if isinstance(restaurant_id, int):
-        to_delete_restaurant = session.query(Restaurant).filter_by(id=restaurant_id)
+        to_delete_restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
         session.delete(to_delete_restaurant)
         session.commit()
     else:
         raise TypeError("Restaurant Id must be of type Integer")
 
+
 # functions to interact with menu table
 # read functions
 def get_all_menu():
     return session.query(MenuItem).all()
+
 
 def get_menu_by_restaurant(restaurant_id):
     """This will return the manu of a specific
