@@ -15,13 +15,19 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 # functions to interact with restaurant table
+# create functions
+# read functions
 def get_all_restaurants():
     """This will return all the rows in the
     restaurant table
+    :return: A list of tuples of restaurants
     """
     return session.query(Restaurant).all()
 
+# delete functions
+
 # functions to interact with menu table
+# read functions
 def get_all_menu():
     return session.query(MenuItem).all()
 
@@ -37,3 +43,6 @@ def get_menu_by_restaurant(restaurant_id):
     else:
         raise TypeError("Restaurant id must be an integer")
 
+# update functions
+
+# delete functions

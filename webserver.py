@@ -1,6 +1,9 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+import re
+import os
 import cgi
 import restaurant_queries
+import subprocess
 
 
 class webServerHandler(BaseHTTPRequestHandler):
@@ -51,8 +54,18 @@ class webServerHandler(BaseHTTPRequestHandler):
             self.wfile.write(output)
             print output
         except:
-            pass
 
+def get_pids(port):
+    command = "lsof -i :%s | awk '{print $2}'" % port
+    pids = subprocess.check_output(command, shell=True)
+    pids = pids.strip()
+    if pids:
+        pids = re.sub(' +', ' ', pids)
+        for pid in pids.split('\n'):
+            try:
+                yield int(pid)
+            except:
+                pass
 
 def main():
     try:
@@ -63,6 +76,12 @@ def main():
     except KeyboardInterrupt:
         print " ^C entered, stopping web server...."
         server.socket.close()
+        # kill the processes in port 8080
+        # including this python script
+        port = 8080
+        pids = set(get_pids(port))
+        command = 'kill -9 {}'.format(' '.join([str(pid) for pid in pids]))
+        os.system(command)
 
 if __name__ == '__main__':
     main()
