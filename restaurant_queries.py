@@ -36,7 +36,31 @@ def get_all_restaurants():
     """
     return session.query(Restaurant).all()
 
+# update functions
+def rename_a_restaurant(restaurant_id, restaurant_new_name):
+    """This will update the name of the given
+    restaurant
+    :param restaurant_id: Id of the restaurant being renamed
+    :return: None
+    """
+    to_rename_restaurant = session.query(Restaurant).filter_by(id=restaurant_id)
+    to_rename_restaurant.name = restaurant_new_name
+    session.add(to_rename_restaurant)
+    session.commit()
+
 # delete functions
+def delete_a_restaurant(restaurant_id):
+    """This will delete a specific row in the
+        database where the id is the given restaurant_id
+    :param restaurant_id: Id of the restaurant being deleted in Integer
+    :return: none
+    """
+    if isinstance(restaurant_id, int):
+        to_delete_restaurant = session.query(Restaurant).filter_by(id=restaurant_id)
+        session.delete(to_delete_restaurant)
+        session.commit()
+    else:
+        raise TypeError("Restaurant Id must be of type Integer")
 
 # functions to interact with menu table
 # read functions

@@ -2,6 +2,8 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import re
 import os
 import cgi
+
+import requests
 import restaurant_queries
 import subprocess
 
@@ -16,7 +18,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 output = "<!DOCTYPE html><html><head><title>Restaurants</title></head><body>"
                 for restaurant in restaurant_queries.get_all_restaurants():
-                    output += "<h2>%s</h2><a href='/restaurant/id/edit'>Edit</a><br><a href='/restaurant/delete'>Delete</a>" % (restaurant.name)
+                    output += "<h2>%s</h2><a href='/restaurant/rename'>Edit</a><br><a href='/restaurant/delete'>Delete</a>" % (restaurant.name)
                 output += "<br><br><br><a href='/restaurant/new'>Add a new restaurant</a></body></html>"
                 self.wfile.write(output)
                 print output
@@ -28,8 +30,9 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 output = ""
                 output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant'>'''
-                output += '''<h2>What's the new name of your restaurant</h2><input name="message" type="text" >'''
-                output += '''<input type="submit" value="Submit"></form>'''
+                output += '''<h2>Are you sure you want to delete this restaurant?</h2><input type="hidden" name="purpose" value="delete">'''
+                output += '''<input type="submit" name="yesorno" value="Yes">'''
+                output += '''<input type="submit" name="yesorno" value="No"></form>'''
                 self.wfile.write(output)
                 print output
                 return
@@ -38,10 +41,22 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
                 output = ""
-                output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant/new'>'''
-                output += '''<h2>What's the new name of your restaurant</h2><input type="hidden" name="purpose" value="new">'''
+                output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant'>'''
+                output += '''<h2>What's the new name of your restaurant</h2><input type="hidden" name="purpose" value="add">'''
                 output += '''<input name="newrestaurantname" type="text" >'''
-                output += '''<input type="submit" value="Submit"></form>'''
+                output += '''<input type="submit" value="Create"></form>'''
+                self.wfile.write(output)
+                print output
+                return
+            if self.path.endswith("/restaurant/rename"):
+                self.send_response(200)
+                self.send_header('Content-type', 'text/html')
+                self.end_headers()
+                output = ""
+                output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant'>'''
+                output += '''<h2>What's the new name of your restaurant</h2><input type="hidden" name="purpose" value="rename">'''
+                output += '''<input name="newrestaurantname" type="text" >'''
+                output += '''<input type="submit" value="Rename"></form>'''
                 self.wfile.write(output)
                 print output
                 return
@@ -58,15 +73,26 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.headers.getheader('content-type'))
             if ctype == 'multipart/form-data':
                 fields = cgi.parse_multipart(self.rfile, pdict)
-                messagecontent = fields.get('purpose')
-                if len(messagecontent) == 1:
-                    if messagecontent[0] == "new" and isinstance(messagecontent[0], str):
+                purpose = fields.get('purpose')
+                if len(purpose) == 1:
+                    if purpose[0] == "add" and isinstance(purpose[0], str):
                         new_restaurant_name = fields.get("newrestaurantname")
                         restaurant_queries.add_restaurant(new_restaurant_name[0])
                         self.wfile.write(new_restaurant_name)
-                print messagecontent[0], type(messagecontent[0])
+                    elif purpose[0] == "delete" and isinstance(purpose[0], str):
+                        # restaurant_queries.delete_a_restaurant(restaurant_id)
+                        # delete_id = fields.get("deleteid")
+                        # yes_or_no = fields.get("yesorno")
+                        # print(yes_or_no)
+                        pass
+                    elif purpose[0] == "rename" and isinstance(purpose[0], str):
+                        # restaurant_queries.rename_a_restaurant(restaurant_id, restaurant_new_name)
+                        pass
+
+                print purpose[0], type(purpose[0])
         except:
             pass
+
 
 def get_pids(port):
     command = "lsof -i :%s | awk '{print $2}'" % port
