@@ -17,8 +17,8 @@ class webServerHandler(BaseHTTPRequestHandler):
                 output = "<!DOCTYPE html><html><head><title>Restaurants</title></head><body>"
                 for restaurant in restaurant_queries.get_all_restaurants():
                     output += "<h2>%s</h2><a href='/restaurant/id/edit'>Edit</a><br><a href='/restaurant/delete'>Delete</a>" % (restaurant.name)
+                output += "<br><br><br><a href='/restaurant/new'>Add a new restaurant</a></body></html>"
                 self.wfile.write(output)
-                output += "<a href='/restaurant/new'>Add a new restaurant</a></body></html>"
                 print output
                 return
 
@@ -27,7 +27,21 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
                 output = ""
-                output += '''<form method='POST' enctype='multipart/form-data' action='/hello'><h2>Are you sure you want to delete?</h2><input name="message" type="text" ><input type="submit" value="Submit"> </form>'''
+                output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant'>'''
+                output += '''<h2>What's the new name of your restaurant</h2><input name="message" type="text" >'''
+                output += '''<input type="submit" value="Submit"></form>'''
+                self.wfile.write(output)
+                print output
+                return
+            if self.path.endswith("/restaurant/new"):
+                self.send_response(200)
+                self.send_header('Content-type', 'text/html')
+                self.end_headers()
+                output = ""
+                output += '''<form method='POST' enctype='multipart/form-data' action='/restaurant/new'>'''
+                output += '''<h2>What's the new name of your restaurant</h2><input type="hidden" name="purpose" value="new">'''
+                output += '''<input name="newrestaurantname" type="text" >'''
+                output += '''<input type="submit" value="Submit"></form>'''
                 self.wfile.write(output)
                 print output
                 return
@@ -44,16 +58,15 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.headers.getheader('content-type'))
             if ctype == 'multipart/form-data':
                 fields = cgi.parse_multipart(self.rfile, pdict)
-                messagecontent = fields.get('message')
-            output = ""
-            output += "<html><body>"
-            output += " <h2> Okay, how about this: </h2>"
-            output += "<h1> %s </h1>" % messagecontent[0]
-            output += '''<form method='POST' enctype='multipart/form-data' action='/hello'><h2>What would you like me to say?</h2><input name="message" type="text" ><input type="submit" value="Submit"> </form>'''
-            output += "</body></html>"
-            self.wfile.write(output)
-            print output
+                messagecontent = fields.get('purpose')
+                if len(messagecontent) == 1:
+                    if messagecontent[0] == "new" and isinstance(messagecontent[0], str):
+                        new_restaurant_name = fields.get("newrestaurantname")
+                        restaurant_queries.add_restaurant(new_restaurant_name[0])
+                        self.wfile.write(new_restaurant_name)
+                print messagecontent[0], type(messagecontent[0])
         except:
+            pass
 
 def get_pids(port):
     command = "lsof -i :%s | awk '{print $2}'" % port

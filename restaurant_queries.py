@@ -16,6 +16,18 @@ session = DBSession()
 
 # functions to interact with restaurant table
 # create functions
+def add_restaurant(restaurant_name):
+    """This will add a new restaurant in the database
+    :param restaurant_name: Name of the restaurant being added in String
+    :return: None
+    """
+    if isinstance(restaurant_name, str):
+        new_restaurant = Restaurant(name=restaurant_name)
+        session.add(new_restaurant)
+        session.commit()
+    else:
+        raise TypeError("Restaurant name must be of type String")
+
 # read functions
 def get_all_restaurants():
     """This will return all the rows in the
