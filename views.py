@@ -100,6 +100,10 @@ def get_menu_by_restaurant(restaurant_id):
 
 # ALL VIEWS
 def all_restaurants_view():
+    """
+    Renders a template that shows all the restaurants
+    :return: A rendered template that shows all the restaurants
+    """
     all_restaurants = get_all_restaurants()
     return render_template('restaurants.html', all_restaurants=all_restaurants)
 
@@ -108,7 +112,7 @@ def restaurant_menu(restaurant_id):
     """
     Create a template for viewing a restaurant's
     menu
-    :param restaurant_id: The id of the restaurant that we need the mene from
+    :param restaurant_id: The id of the restaurant that we need the menu from
     :return: A template for viewing a restaurant's menu
     """
     restaurant = get_a_restaurant_by_id(restaurant_id)
@@ -121,7 +125,8 @@ def restaurant_menu(restaurant_id):
 def new_menu_item(restaurant_id):
     """
     Creates a new menu entry in the database
-    :return: Returns a rendered template
+    :param: Id of the restaurant that will be having a new item in the menu
+    :return: Returns a rendered template or redirectioin
     """
     if request.method == 'POST':
         # TODO:
@@ -142,7 +147,7 @@ def new_menu_item(restaurant_id):
 def edit_menu_item(restaurant_id, menu_id):
     """
     Updates a menu in the MenuItem table
-    :return: None
+    :return: A rendered template or a redirection
     """
     edited_item = session.query(MenuItem).filter_by(id=int(menu_id)).one()
     if request.method == 'POST':
@@ -174,6 +179,9 @@ def delete_menu_item(restaurant_id, menu_id):
 
 
 # JSON VIEWS
+# TODO:
+    # serialize does not work
+    # make it work
 def restaurant_menu_JSON(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id).all()
