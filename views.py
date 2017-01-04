@@ -105,7 +105,19 @@ def all_restaurants_view():
     :return: A rendered template that shows all the restaurants
     """
     all_restaurants = get_all_restaurants()
-    return render_template('restaurants.html', all_restaurants=all_restaurants)
+    return render_template("restaurants.html", all_restaurants=all_restaurants)
+
+def edit_restaurant(restaurant_id):
+    restaurant_to_edit = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    if request.method == "POST":
+        restaurant_to_edit.name = request.form['restaurantnewname']
+        session.add(restaurant_to_edit)
+        session.commit()
+        return redirect(url_for("all_restaurants_view"))
+    else:
+        return render_template("editrestaurant.html",
+                               restaurant_id=restaurant_id,
+                               restaurant_to_edit_name=restaurant_to_edit.name)
 
 
 def restaurant_menu(restaurant_id):

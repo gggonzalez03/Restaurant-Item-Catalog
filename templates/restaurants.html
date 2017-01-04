@@ -6,7 +6,8 @@
 </head>
 <body>
     {% for restaurant in all_restaurants %}
-    <a href="{{url_for('restaurant_menu', restaurant_id=restaurant.id)}}"><h2>{{restaurant.name}}</h2></a>
+    <a href="{{url_for("restaurant_menu", restaurant_id=restaurant.id)}}"><h2>{{restaurant.name}}</h2></a>
+    <a href="{{url_for("edit_restaurant", restaurant_id=restaurant.id)}}">Edit</a>
     {% endfor %}
 </body>
 </html>

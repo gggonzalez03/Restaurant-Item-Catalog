@@ -8,6 +8,12 @@ methods = ["GET","POST"]
 app.add_url_rule('/restaurants',
                  view_func=views.all_restaurants_view,
                  methods=methods)
+
+# Show form to edit a restaurant
+app.add_url_rule('/restaurants/<int:restaurant_id>/edit',
+                 view_func=views.edit_restaurant,
+                 methods=methods)
+
 # Show the menu of a restaurant
 app.add_url_rule('/restaurants/<int:restaurant_id>/',
                  view_func=views.restaurant_menu,
