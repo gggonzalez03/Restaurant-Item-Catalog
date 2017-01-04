@@ -5,6 +5,11 @@
     <title>Menu</title>
 </head>
 <body>
-    <p>This is the menu page</p>
+    <h2>{{restaurant.name}}</h2>
+    {% for item in items %}
+        <p>{{item.name}}</p>
+        <p>{{item.price}}</p>
+        <p>{{item.description}}</p>
+    {% endfor %}
 </body>
 </html>

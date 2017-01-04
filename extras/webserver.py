@@ -2,7 +2,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import re
 import os
 import cgi
-import restaurant_queries
+import views
 import subprocess
 
 
@@ -14,7 +14,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
                 output = "<html><head><title>Restaurants</title></head><body>"
-                for restaurant in restaurant_queries.get_all_restaurants():
+                for restaurant in views.get_all_restaurants():
                     output += "<h2>%s</h2><a href='/restaurant/%s/edit'>Edit</a><br><a href='/restaurant/%s/delete'>Delete</a>" % (
                         restaurant.name, restaurant.id, restaurant.id)
                 output += "<br><br><br><a href='/restaurant/new'>Add a new restaurant</a></body></html>"
@@ -72,7 +72,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                 if len(purpose) == 1:
                     if purpose[0] == "add" and isinstance(purpose[0], str):
                         new_restaurant_name = fields.get("newrestaurantname")
-                        restaurant_queries.add_restaurant(new_restaurant_name[0])
+                        views.add_restaurant(new_restaurant_name[0])
 
                         # this will redirect to the /restaurant page
                         self.redirect_to_url("/restaurant")
@@ -81,12 +81,12 @@ class webServerHandler(BaseHTTPRequestHandler):
                         restaurant_id = fields.get("restid")
                         yes_or_no = fields.get("yesorno")
                         if yes_or_no[0] == "Yes":
-                            restaurant_queries.delete_a_restaurant(int(restaurant_id[0]))
+                            views.delete_a_restaurant(int(restaurant_id[0]))
                         self.redirect_to_url("/restaurant")
                     elif purpose[0] == "edit" and isinstance(purpose[0], str):
                         restaurant_id = fields.get("restid")
                         new_restaurant_name = fields.get("newrestaurantname")
-                        restaurant_queries.rename_a_restaurant(int(restaurant_id[0]), new_restaurant_name[0])
+                        views.rename_a_restaurant(int(restaurant_id[0]), new_restaurant_name[0])
 
                         self.redirect_to_url("/restaurant")
         except:
