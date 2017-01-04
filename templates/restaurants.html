@@ -5,6 +5,8 @@
     <title>Restaurant</title>
 </head>
 <body>
-    <p>This is the restaurant page</p>
+    {% for restaurant in all_restaurants %}
+    <a href="{{url_for('restaurant_menu', restaurant_id=restaurant.id)}}"><h2>{{restaurant.name}}</h2></a>
+    {% endfor %}
 </body>
 </html>

@@ -34,7 +34,20 @@ class MenuItem(Base):
                            ForeignKey('restaurant.id'))
     restaurant = relationship(Restaurant)
 
-# create a creat_engine instance that
+
+@property
+def serialize(self):
+    # Returns a serializable data
+    return {
+        "name": self.name,
+        "description": self.description,
+        "id": self.id,
+        "price": self.price,
+        "course": self.course,
+    }
+
+
+# create a create_engine instance that
 # points to the database engine that will be used
 # in the module
 engine = create_engine(
