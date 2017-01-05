@@ -14,6 +14,11 @@ app.add_url_rule('/restaurants/<int:restaurant_id>/edit',
                  view_func=views.edit_restaurant,
                  methods=methods)
 
+# Show form to delete a restaurant from the database
+app.add_url_rule("/restaurants/<int:restaurant_id>/delete",
+                 view_func=views.delete_restaurant,
+                 methods=methods)
+
 # Show the menu of a restaurant
 app.add_url_rule('/restaurants/<int:restaurant_id>/',
                  view_func=views.restaurant_menu,
