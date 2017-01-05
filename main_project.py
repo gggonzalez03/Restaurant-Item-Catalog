@@ -9,6 +9,11 @@ app.add_url_rule('/restaurants',
                  view_func=views.all_restaurants_view,
                  methods=methods)
 
+# Show form to add a new restaurant
+app.add_url_rule("/restaurants/add",
+                 view_func=views.add_restaurant,
+                 methods=methods)
+
 # Show form to edit a restaurant
 app.add_url_rule('/restaurants/<int:restaurant_id>/edit',
                  view_func=views.edit_restaurant,

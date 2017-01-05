@@ -108,6 +108,17 @@ def all_restaurants_view():
     return render_template("restaurants.html", all_restaurants=all_restaurants)
 
 
+def add_restaurant():
+    if request.method == "POST":
+        restaurant_name = request.form['restaurantname']
+        new_restaurant = Restaurant(name=restaurant_name)
+        session.add(new_restaurant)
+        session.commit()
+        return redirect(url_for("all_restaurants_view"))
+    else:
+        return render_template("addrestaurant.html")
+
+
 def edit_restaurant(restaurant_id):
     restaurant_to_edit = session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == "POST":
@@ -207,10 +218,10 @@ def delete_menu_item(restaurant_id, menu_id):
         return render_template('deletemenuitem.html', item=item_to_delete, restaurant_id=restaurant_id)
 
 
-    # JSON VIEWS
-    # TODO:
-    # serialize does not work
-    # make it work
+        # JSON VIEWS
+        # TODO:
+        # serialize does not work
+        # make it work
 
 
 def restaurant_menu_JSON(restaurant_id):
