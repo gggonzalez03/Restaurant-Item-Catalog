@@ -5,11 +5,14 @@
     <title>Menu</title>
 </head>
 <body>
+    <a href="{{url_for('add_menu_item', restaurant_id=restaurant.id)}}">Add item</a>
     <h2>{{restaurant.name}}</h2>
     {% for item in items %}
         <p>{{item.name}}</p>
         <p>{{item.price}}</p>
         <p>{{item.description}}</p>
+        <a>Edit</a>
+        <a>Delete</a>
     {% endfor %}
 </body>
 </html>

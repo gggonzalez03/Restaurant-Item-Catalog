@@ -162,7 +162,7 @@ def restaurant_menu(restaurant_id):
                            items=menu_by_restaurant)
 
 
-def new_menu_item(restaurant_id):
+def add_menu_item(restaurant_id):
     """
     Creates a new menu entry in the database
     :param: Id of the restaurant that will be having a new item in the menu
@@ -172,16 +172,16 @@ def new_menu_item(restaurant_id):
         # TODO:
         # description and others should accept values
         # add input tags into the HTML file
-        newItem = MenuItem(name=request.form['name'],
-                           description=None,
-                           price=None,
-                           course=None,
+        newItem = MenuItem(name=request.form['additemname'],
+                           description=request.form['additemdescription'],
+                           price=request.form['additemprice'],
+                           course=request.form['additemcourse'],
                            restaurant_id=int(restaurant_id))
         session.add(newItem)
         session.commit()
         return redirect(url_for('restaurant_menu', restaurant_id=restaurant_id))
     else:
-        return render_template('newmenuitem.html', restaurant_id=restaurant_id)
+        return render_template('addmenuitem.html', restaurant_id=restaurant_id)
 
 
 def edit_menu_item(restaurant_id, menu_id):

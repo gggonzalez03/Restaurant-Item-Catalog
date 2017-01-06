@@ -32,7 +32,7 @@ app.add_url_rule('/restaurants/<int:restaurant_id>/',
 # Show form to add new item on get
 # and add new menu item on post
 app.add_url_rule('/restaurants/<int:restaurant_id>/new',
-                 view_func=views.new_menu_item,
+                 view_func=views.add_menu_item,
                  methods=methods)
 
 # Show form to edit an item on get
