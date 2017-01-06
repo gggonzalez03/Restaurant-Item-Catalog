@@ -209,13 +209,20 @@ def delete_menu_item(restaurant_id, menu_id):
     :param menu_id: Id of the item being deleted
     :return: A rendered template or a redirection
     """
-    item_to_delete = session.query(MenuItem).filter_by(id=menu_id).one()
     if request.method == 'POST':
-        session.delete(item_to_delete)
-        session.commit()
+        if request.form['todeletemenuitem'] == "Yes":
+            item_to_delete = session.query(MenuItem).filter_by(id=menu_id).one()
+            session.delete(item_to_delete)
+            session.commit()
+        else:
+            # TODO:
+            # Add flash messages
+            pass
         return redirect(url_for('restaurant_menu', restaurant_id=restaurant_id))
     else:
-        return render_template('deletemenuitem.html', item=item_to_delete, restaurant_id=restaurant_id)
+        item_to_delete = session.query(MenuItem).filter_by(id=menu_id).one()
+        return render_template('deletemenuitem.html', item_to_delete=item_to_delete,
+                               restaurant_id=restaurant_id)
 
 
         # JSON VIEWS
