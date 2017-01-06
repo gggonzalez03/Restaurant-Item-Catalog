@@ -191,14 +191,20 @@ def edit_menu_item(restaurant_id, menu_id):
     """
     edited_item = session.query(MenuItem).filter_by(id=int(menu_id)).one()
     if request.method == 'POST':
-        if request.form['name'] and request.form['editornot'] == "Edit":
-            edited_item.name = request.form['name']
+        if request.form['submitedititem'] == "Edit":
+            edited_item.name = request.form['edititemname']
+            edited_item.price = request.form['edititemprice']
+            edited_item.description = request.form['edititemdescription']
+            edited_item.course = request.form['edititemcourse']
             session.add(edited_item)
             session.commit()
-        return redirect(url_for('restaurant_menu', restaurant_id=restaurant_id))
+            return redirect(url_for('restaurant_menu', restaurant_id=restaurant_id))
+        else:
+            return redirect(
+                url_for('restaurant_menu', restaurant_id=restaurant_id))
     else:
         return render_template(
-            'editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=edited_item)
+            'editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item_to_edit=edited_item)
 
 
 def delete_menu_item(restaurant_id, menu_id):
