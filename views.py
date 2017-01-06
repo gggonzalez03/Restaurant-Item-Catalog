@@ -135,7 +135,7 @@ def edit_restaurant(restaurant_id):
 def delete_restaurant(restaurant_id):
     restaurant_to_be_deleted = session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == "POST":
-        if request.form("todeleterestaurant") == "Yes":
+        if request.form["todeleterestaurant"] == "Yes":
             session.delete(restaurant_to_be_deleted)
             session.commit()
             return redirect(url_for("all_restaurants_view"))
