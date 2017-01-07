@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Item</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block pagetitle %}Delete Item{% endblock %}
+{% block body %}
     <form id="deletemenuitemform" action="{{url_for('delete_menu_item', restaurant_id=restaurant_id, menu_id=item_to_delete.id)}}" method="post">
         <label>Are you sure you want to delete {{item_to_delete.name}}?</label>
         <input type="submit" name="todeletemenuitem" for="deletemenuitemform" value="Yes">
         <input type="submit" name="todeletemenuitem" for="deletemenuitemform" value="No">
     </form>
-</body>
-</html>
+{% endblock %}

@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Restaurant</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block pagetitle %}Restaurant{% endblock %}
+{% block body %}
     <h1></h1>
     <a href="{{url_for('add_restaurant')}}">Add a restaurant</a>
     {% for restaurant in all_restaurants %}
@@ -12,5 +8,4 @@
     <a href="{{url_for('edit_restaurant', restaurant_id=restaurant.id)}}">Edit</a>
     <a href="{{url_for('delete_restaurant', restaurant_id=restaurant.id)}}">Delete</a>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
