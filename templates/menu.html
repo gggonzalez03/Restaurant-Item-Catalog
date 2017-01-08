@@ -1,13 +1,30 @@
 {% extends "base.html" %}
 {% block pagetitle %}Menu{% endblock %}
 {% block body %}
-    <a href="{{url_for('add_menu_item', restaurant_id=restaurant.id)}}">Add item</a>
-    <h2>{{restaurant.name}}</h2>
-    {% for menu_item in items %}
-        <p>{{menu_item.name}}</p>
-        <p>{{menu_item.price}}</p>
-        <p>{{menu_item.description}}</p>
-        <a href="{{url_for('edit_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id)}}">Edit</a>
-        <a href="{{url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id)}}">Delete</a>
-    {% endfor %}
+	<header class="row">
+		<section class="col-xs-6">
+			<h2>{{restaurant.name}}'s Menu<a href="{{url_for('add_menu_item', restaurant_id=restaurant.id)}}"><button class="btn addbutton">+</button></a></h2>
+		</section>
+	</header>
+	<main class="row">
+		<section class="col-xs-12 col-md-6 col-md-offset-1">
+
+
+			<table class="table table-striped">
+            {% for menu_item in items %}
+                <tr>
+                    <td>
+                        <p>{{menu_item.name}}</p>
+				        <p>{{menu_item.price}}</p>
+				        <p>{{menu_item.description}}</p>
+                    </td>
+                    <td>
+                        <a href="{{url_for('edit_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id)}}">✎</a>
+		        		<a href="{{url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id)}}">✕</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+		</section>
+	</main>
 {% endblock %}
