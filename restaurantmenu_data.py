@@ -1,7 +1,8 @@
+# (c) Udacity
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database_setup import Restaurant, Base, MenuItem
+from restaurantmenu_database_setup import Restaurant, Base, MenuItem
 
 engine = create_engine('sqlite:///restaurantmenu.db')
 # Bind the engine to the metadata of the Base class so that the
