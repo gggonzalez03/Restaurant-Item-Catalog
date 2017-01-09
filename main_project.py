@@ -4,6 +4,10 @@ import views
 app = Flask(__name__)
 
 methods = ["GET","POST"]
+# Show login page
+app.add_url_rule('/login',
+                 view_func=views.login,
+                 methods=methods)
 # Show all restaurants
 app.add_url_rule('/restaurants',
                  view_func=views.all_restaurants_view,
