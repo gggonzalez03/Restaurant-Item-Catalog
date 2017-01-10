@@ -10,23 +10,42 @@ from sqlalchemy import create_engine
 # class that corresponds to a table in the database
 Base = declarative_base()
 
+class User(Base):
+    __tablename__= "user"
+
+    # Create the columns in table user
+    user_id =Column(Integer,
+                    primary_key=True)
+    user_name = Column(String(80),
+                  nullable=False)
+    email = Column(String,
+                   nullable=False)
+    picture = Column(String,
+                     nullable=True)
+    refresh_token = Column(String,
+                           nullable=True)
+
+
 class Restaurant(Base):
     __tablename__ = 'restaurant'
 
     # create the columns in table restaurant
-    name = Column(String(80),
-                  nullable=False)
     id = Column(Integer,
                 primary_key=True)
+    name = Column(String(80),
+                  nullable=False)
+    user_id = Column(String(80),
+                       ForeignKey('user.user_id'))
+    user = relationship(User)
 
 class MenuItem(Base):
     __tablename__ = 'menu_item'
 
     # create the columns in table menu_item
+    id = Column(Integer,
+                primary_key=True)
     name =Column(String(80),
                  nullable = False)
-    id = Column(Integer,
-                primary_key = True)
     description = Column(String(250))
     price = Column(String(8))
     course = Column(String(250))
@@ -35,16 +54,16 @@ class MenuItem(Base):
     restaurant = relationship(Restaurant)
 
 
-@property
-def serialize(self):
-    # Returns a serializable data
-    return {
-        "name": self.name,
-        "description": self.description,
-        "id": self.id,
-        "price": self.price,
-        "course": self.course,
-    }
+    @property
+    def serialize(self):
+        # Returns a serializable data
+        return {
+            "name": self.name,
+            "description": self.description,
+            "id": self.id,
+            "price": self.price,
+            "course": self.course,
+        }
 
 
 # create a create_engine instance that
