@@ -9,12 +9,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-from restaurantmenu_database_setup import Base, Restaurant, MenuItem, serialize
+from restaurantmenu_database_setup import Base, Restaurant, MenuItem
 
 # clien id
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 # create connectionw ith the database engine "sqlite"
-engine = create_engine("sqlite:///restaurantmenu.db")
+engine = create_engine("sqlite:///restaurantmenuwithusers.db")
 
 # make connection between classes and
 # corresponding tables in the database
