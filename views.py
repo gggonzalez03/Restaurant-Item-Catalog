@@ -9,12 +9,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-from restaurantmenu_database_setup import Base, Restaurant, MenuItem
+from restaurantmenu_database_setup import Base, Restaurant, MenuItem, engine
 
 # clien id
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 # create connectionw ith the database engine "sqlite"
-engine = create_engine("sqlite:///restaurantmenuwithusers.db")
+# engine = create_engine("sqlite:///restaurantmenu.db")
 
 # make connection between classes and
 # corresponding tables in the database
@@ -196,7 +196,7 @@ def all_restaurants_view():
     :return: A rendered template that shows all the restaurants
     """
     all_restaurants = get_all_restaurants()
-    return render_template("restaurants.html", all_restaurants=all_restaurants, user=login_session['username'])
+    return render_template("restaurants.html", all_restaurants=all_restaurants)
 
 
 def add_restaurant():

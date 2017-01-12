@@ -74,7 +74,7 @@ class MenuItem(Base):
 # points to the database engine that will be used
 # in the module
 engine = create_engine(
-    'sqlite:///restaurantmenuwithusers.db')
+    'sqlite:///restaurantmenu.db')
 
 # goes to the database and adds
 # the classes that correspond to
