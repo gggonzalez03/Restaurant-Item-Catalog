@@ -1,43 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+{% extends "base.html" %}
+{% block script %}
     <!--GOOGLE PLUS SIGN IN PRE-REQUISITES-->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//apis.google.com/js/platform.js?onload=start" async defer></script>
-    <!--END PRE-REQUISITES-->
-</head>
-<body>
-    <form id="loginform" action="{{url_for('login')}}" method="post">
-        <label for="loginemail" >Email: </label>
-        <input id="loginemail" type="email" name="loginemail">
-        <label for="loginpassword">Password: </label>
-        <input id="loginpassword" type="password" name="loginpassword">
-        <input type="submit" form="loginform" value="Log In">
-    </form>
-    <!--GOOGLE SIGN IN BUTTON-->
-    <div id="signInButton">
-        <span class="g-signin"
-              data-scope="openid email"
-              data-clientid="YOUR_CLIENT_ID_IN_HERE"
-              data-redirecturi="postmessage"
-              data-accesstype="offline"
-              data-cookiepolicy="single_host_origin"
-              data-callback="signInCallback"
-              data-approvalprompt="force">
-        </span>
-    </div>
-    <div id="result"></div>
-
     <script>
         function signInCallback(authResult) {
+           // if there is a code received from the google plus
+           // login button
           if (authResult['code']) {
 
-            // Hide the sign-in button now that the user is authorized
+            // Hide the google sign in button since
+            // the user has already tried to login
+            // and should be redirected upon verification of the credentials
             $('#signinButton').attr('style', 'display: none');
 
-            // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+            // Send the one-time-use code to the server, if the server responds, write a 'login successful' message
+            // to the web page and then redirect back to the main restaurants page
             $.ajax({
               type: 'POST',
               url: '/login?state={{STATE}}',
@@ -63,6 +41,28 @@
               }
 
           }); } }
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}
+{% block body %}
+    <form id="loginform" action="{{url_for('login')}}" method="post">
+        <label for="loginemail" >Email: </label>
+        <input id="loginemail" type="email" name="loginemail">
+        <br>
+        <label for="loginpassword">Password: </label>
+        <input id="loginpassword" type="password" name="loginpassword">
+        <input type="submit" form="loginform" value="Log In">
+    </form>
+    <!--GOOGLE SIGN IN BUTTON-->
+    <div id="signInButton">
+        <span class="g-signin"
+              data-scope="openid email"
+              data-clientid="YOUR_CLIENT_ID_IN_HERE"
+              data-redirecturi="postmessage"
+              data-accesstype="offline"
+              data-cookiepolicy="single_host_origin"
+              data-callback="signInCallback"
+              data-approvalprompt="force">
+        </span>
+    </div>
+    <div id="result"></div>
+{% endblock %}
