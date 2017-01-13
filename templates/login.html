@@ -18,7 +18,7 @@
             // to the web page and then redirect back to the main restaurants page
             $.ajax({
               type: 'POST',
-              url: '/login?state={{STATE}}',
+              url: '/googlelogin?state={{STATE}}',
               processData: false,
               data: authResult['code'],
               contentType: 'application/octet-stream; charset=utf-8',

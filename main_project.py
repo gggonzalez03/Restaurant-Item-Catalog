@@ -8,6 +8,11 @@ methods = ["GET","POST"]
 app.add_url_rule('/login',
                  view_func=views.login,
                  methods=methods)
+# Google Plus login
+app.add_url_rule('/googlelogin',
+                 view_func=views.google_login,
+                 methods=methods)
+
 # Show all restaurants
 app.add_url_rule('/restaurants',
                  view_func=views.all_restaurants_view,
