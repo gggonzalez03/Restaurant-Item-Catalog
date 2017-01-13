@@ -39,6 +39,14 @@ class Restaurant(Base):
                      ForeignKey('user.user_id'))
     user = relationship(User)
 
+    @property
+    def serialize(self):
+        # Returns a serializable data
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
 
 class MenuItem(Base):
     __tablename__ = 'menu_item'
@@ -62,11 +70,11 @@ class MenuItem(Base):
     def serialize(self):
         # Returns a serializable data
         return {
+            "id": self.id,
             "name": self.name,
             "description": self.description,
-            "id": self.id,
             "price": self.price,
-            "course": self.course,
+            "course": self.course
         }
 
 

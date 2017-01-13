@@ -53,12 +53,12 @@ app.add_url_rule('/restaurants/<int:restaurant_id>/<int:menu_id>/delete',
 #JSON URLS
 # Get JSON formatted menu of a restaurant
 app.add_url_rule('/restaurants/<int:restaurant_id>/menu/JSON',
-                 view_func=views.restaurant_menu_JSON,
+                 view_func=views.restaurant_menu_json,
                  methods=methods)
 
 # Get JSON formatted details of an item in a menu of a restaurant
 app.add_url_rule('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON',
-                 view_func=views.restaurant_menu_item_JSON,
+                 view_func=views.restaurant_menu_item_json,
                  methods=methods)
 
 if __name__ == '__main__':

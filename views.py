@@ -114,7 +114,7 @@ def login():
             response = make_response(json.dumps('Invalid state parameter.'), 401)
             response.headers['Content-Type'] = 'application/json'
             return response
-        # Obtain authorization code
+        # Get auth code from the javascript ajax request
         code = request.data
         try:
             print "Trying"
@@ -322,19 +322,13 @@ def delete_menu_item(restaurant_id, menu_id):
                                restaurant_id=restaurant_id)
 
 
-        # JSON VIEWS
-        # TODO:
-        # serialize does not work
-        # make it work
-
-
-def restaurant_menu_JSON(restaurant_id):
+def restaurant_menu_json(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id).all()
 
     return jsonify(MenuItems=[i.serialize for i in items])
 
 
-def restaurant_menu_item_JSON(restaurant_id, menu_id):
+def restaurant_menu_item_json(restaurant_id, menu_id):
     item = session.query(MenuItem).filter_by(id=menu_id).first()
     return jsonify(item.serialize)
