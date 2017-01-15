@@ -233,6 +233,9 @@ def all_restaurants_view():
 
 
 def add_restaurant():
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
+
     if request.method == "POST":
         restaurant_name = request.form['restaurantname']
         new_restaurant = Restaurant(name=restaurant_name)
@@ -244,6 +247,8 @@ def add_restaurant():
 
 
 def edit_restaurant(restaurant_id):
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     restaurant_to_edit = session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == "POST":
         restaurant_to_edit.name = request.form['restaurantnewname']
@@ -257,6 +262,8 @@ def edit_restaurant(restaurant_id):
 
 
 def delete_restaurant(restaurant_id):
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     restaurant_to_be_deleted = session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == "POST":
         if request.form["todeleterestaurant"] == "Yes":
@@ -292,6 +299,8 @@ def add_menu_item(restaurant_id):
     :param: Id of the restaurant that will be having a new item in the menu
     :return: Returns a rendered template or redirectioin
     """
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         # TODO:
         # description and others should accept values
@@ -313,6 +322,8 @@ def edit_menu_item(restaurant_id, menu_id):
     Updates a menu in the MenuItem table
     :return: A rendered template or a redirection
     """
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     edited_item = session.query(MenuItem).filter_by(id=int(menu_id)).one()
     if request.method == 'POST':
         if request.form['submitedititem'] == "Edit":
@@ -339,6 +350,8 @@ def delete_menu_item(restaurant_id, menu_id):
     :param menu_id: Id of the item being deleted
     :return: A rendered template or a redirection
     """
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         if request.form['todeletemenuitem'] == "Yes":
             item_to_delete = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -356,6 +369,8 @@ def delete_menu_item(restaurant_id, menu_id):
 
 
 def restaurant_menu_json(restaurant_id):
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id).all()
 
@@ -363,5 +378,7 @@ def restaurant_menu_json(restaurant_id):
 
 
 def restaurant_menu_item_json(restaurant_id, menu_id):
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     item = session.query(MenuItem).filter_by(id=menu_id).first()
     return jsonify(item.serialize)
