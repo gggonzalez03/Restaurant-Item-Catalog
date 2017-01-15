@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-from restaurantmenu_database_setup import Base, Restaurant, MenuItem, engine
+from restaurantmenu_database_setup import Base, User, Restaurant, MenuItem, engine
 
 # clien id
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
@@ -22,6 +22,23 @@ Base.metadata.bind = engine
 # create a session
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+def add_user(login_session):
+    new_user = User(name=login_session['username'],
+                    email=login_session['email'],
+                    picture=login_session['picture'])
+    session.add(new_user)
+    session.commit()
+
+
+def get_user_by_email(email):
+    user = session.query(User).filter_by(email=email).one()
+    return user
+
+
+def get_user_by_id(user_id):
+    user = session.query(User).filter_by(user_id= user_id).one()
+    return user
 
 
 # functions to interact with restaurant table
@@ -189,6 +206,9 @@ def google_login():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    if not get_user_by_email(login_session['email']):
+        add_user(login_session)
+
     response = make_response(json.dumps('User is being logged in'),
                              200)
     response.headers['Content-Type'] = 'application/json'
@@ -216,12 +236,13 @@ def google_logout():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
-        return  redirect(url_for('login'))
+        return redirect(url_for('login'))
 
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
+
 
 def all_restaurants_view():
     """
