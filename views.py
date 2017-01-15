@@ -106,11 +106,11 @@ def get_menu_by_restaurant(restaurant_id):
         raise TypeError("Restaurant id must be an integer")
 
 
-# DELETE FUNCTIONS
-
 # ALL VIEWS
 def login():
     if request.method == "POST":
+        # This will not be implemented for now since
+        # currently, I am working on the OAuth
         pass
     else:
         state = "".join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
@@ -127,16 +127,11 @@ def google_login():
     # Get auth code from the javascript ajax request
     code = request.data
     try:
-        print "Trying"
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
-        print "Still trying"
         oauth_flow.redirect_uri = 'postmessage'
-        print "Still trying"
         credentials = oauth_flow.step2_exchange(code)
-        print "Still trying"
     except FlowExchangeError:
-        print "It tried"
         response = make_response(
             json.dumps('Failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -171,6 +166,14 @@ def google_login():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    stored_credentials = login_session.get('credentials')
+    stored_gplus_id = login_session.get('gplus_id')
+    if stored_credentials is not None and gplus_id == stored_gplus_id:
+        response = make_response(json.dumps('Current user is already connected.'),
+                                 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
     # Store the access token in the session for later use.
     login_session['credentials'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
@@ -186,14 +189,39 @@ def google_login():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
-    stored_credentials = login_session.get('credentials')
-    stored_gplus_id = login_session.get('gplus_id')
-    if stored_credentials is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+    response = make_response(json.dumps('User is being logged in'),
+                             200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
+def google_logout():
+    credentials = login_session.get('credentials')
+    if credentials is None:
+        response = make_response(json.dumps("Current user not connected."), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    print credentials
+
+    # Revoke the token using google API
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % credentials
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    print 'result is '
+    print result
+    if result['status'] == '200':
+        del login_session['credentials']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        return  redirect(url_for('login'))
+
+    else:
+        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 def all_restaurants_view():
     """
