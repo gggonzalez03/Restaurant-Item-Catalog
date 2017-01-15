@@ -32,8 +32,11 @@ def add_user(login_session):
 
 
 def get_user_by_email(email):
-    user = session.query(User).filter_by(email=email).one()
-    return user
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user
+    except:
+        return None
 
 
 def get_user_by_id(user_id):
