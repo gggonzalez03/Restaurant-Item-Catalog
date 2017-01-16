@@ -174,7 +174,7 @@ def all_restaurants_view():
     all_restaurants = session.query(Restaurant).all()
     return render_template("restaurants.html",
                            all_restaurants=all_restaurants,
-                           username=login_session['username'])
+                           logged_in_user=get_user_by_email(login_session['email']))
 
 
 def add_restaurant():
@@ -253,7 +253,8 @@ def restaurant_menu(restaurant_id):
     menu_by_restaurant = session.query(MenuItem).filter_by(restaurant_id=restaurant_id)
     return render_template("menu.html",
                            restaurant=restaurant,
-                           items=menu_by_restaurant)
+                           items=menu_by_restaurant,
+                           logged_in_user=get_user_by_email(login_session['email']))
 
 
 def add_menu_item(restaurant_id):
