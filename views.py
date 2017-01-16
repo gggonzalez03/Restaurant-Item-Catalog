@@ -23,6 +23,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
 def add_user(login_session):
     new_user = User(name=login_session['username'],
                     email=login_session['email'],
@@ -40,7 +41,7 @@ def get_user_by_email(email):
 
 
 def get_user_by_id(user_id):
-    user = session.query(User).filter_by(user_id= user_id).one()
+    user = session.query(User).filter_by(user_id=user_id).one()
     return user
 
 
@@ -171,7 +172,9 @@ def all_restaurants_view():
     :return: A rendered template that shows all the restaurants
     """
     all_restaurants = session.query(Restaurant).all()
-    return render_template("restaurants.html", all_restaurants=all_restaurants)
+    return render_template("restaurants.html",
+                           all_restaurants=all_restaurants,
+                           username=login_session['username'])
 
 
 def add_restaurant():
@@ -179,8 +182,10 @@ def add_restaurant():
         return redirect(url_for('login'))
 
     if request.method == "POST":
+        user_id = get_user_by_email(login_session['email']).user_id
         restaurant_name = request.form['restaurantname']
-        new_restaurant = Restaurant(name=restaurant_name)
+        new_restaurant = Restaurant(user_id=user_id,
+                                    name=restaurant_name)
         session.add(new_restaurant)
         session.commit()
         return redirect(url_for("all_restaurants_view"))
@@ -192,6 +197,14 @@ def edit_restaurant(restaurant_id):
     if 'username' not in login_session:
         return redirect(url_for('login'))
     restaurant_to_edit = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    user_id = get_user_by_email(login_session['email']).user_id
+
+    # return an error if the user is trying to edit a restaurant
+    # that is not his own
+    if user_id != restaurant_to_edit.user.user_id:
+        response = make_response(json.dumps('Oops. You\'re trying to touch something that is not yours!', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
     if request.method == "POST":
         restaurant_to_edit.name = request.form['restaurantnewname']
         session.add(restaurant_to_edit)
@@ -207,6 +220,15 @@ def delete_restaurant(restaurant_id):
     if 'username' not in login_session:
         return redirect(url_for('login'))
     restaurant_to_be_deleted = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    user_id = get_user_by_email(login_session['email']).user_id
+
+    # return an error if the user is trying to edit a restaurant
+    # that is not his own
+    if user_id != restaurant_to_be_deleted.user.user_id:
+        response = make_response(json.dumps('Oops. You\'re trying to touch something that is not yours!', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
     if request.method == "POST":
         if request.form["todeleterestaurant"] == "Yes":
             session.delete(restaurant_to_be_deleted)
@@ -215,7 +237,6 @@ def delete_restaurant(restaurant_id):
         else:
             return redirect(url_for("all_restaurants_view"))
     else:
-        print "success"
         return render_template("deleterestaurant.html",
                                restaurant_id=restaurant_id,
                                restaurant_name=restaurant_to_be_deleted.name)
@@ -243,6 +264,15 @@ def add_menu_item(restaurant_id):
     """
     if 'username' not in login_session:
         return redirect(url_for('login'))
+
+    restaurant_owner_id = session.query(Restaurant).filter_by(id=restaurant_id).one().user.user_id
+    user_id = get_user_by_email(login_session['email']).user_id
+
+    if user_id != restaurant_owner_id:
+        response = make_response(json.dumps('Oops. You\'re trying to touch something that is not yours!', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
     if request.method == 'POST':
         # TODO:
         # description and others should accept values
@@ -267,6 +297,12 @@ def edit_menu_item(restaurant_id, menu_id):
     if 'username' not in login_session:
         return redirect(url_for('login'))
     edited_item = session.query(MenuItem).filter_by(id=int(menu_id)).one()
+    user_id = get_user_by_email(login_session['email']).user_id
+
+    if user_id != edited_item.restaurant.user.user_id:
+        response = make_response(json.dumps('Oops. You\'re trying to touch something that is not yours!', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
     if request.method == 'POST':
         if request.form['submitedititem'] == "Edit":
             edited_item.name = request.form['edititemname']
@@ -294,9 +330,17 @@ def delete_menu_item(restaurant_id, menu_id):
     """
     if 'username' not in login_session:
         return redirect(url_for('login'))
+
+    item_to_delete = session.query(MenuItem).filter_by(id=menu_id).one()
+    user_id = get_user_by_email(login_session['email']).user_id
+
+    if user_id != item_to_delete.restaurant.user.user_id:
+        response = make_response(json.dumps('Oops. You\'re trying to touch something that is not yours!', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
     if request.method == 'POST':
         if request.form['todeletemenuitem'] == "Yes":
-            item_to_delete = session.query(MenuItem).filter_by(id=menu_id).one()
             session.delete(item_to_delete)
             session.commit()
         else:
@@ -305,7 +349,6 @@ def delete_menu_item(restaurant_id, menu_id):
             pass
         return redirect(url_for('restaurant_menu', restaurant_id=restaurant_id))
     else:
-        item_to_delete = session.query(MenuItem).filter_by(id=menu_id).one()
         return render_template('deletemenuitem.html', item_to_delete=item_to_delete,
                                restaurant_id=restaurant_id)
 

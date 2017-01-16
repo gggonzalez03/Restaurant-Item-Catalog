@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block pagetitle %}Restaurant{% endblock %}
-{% block links %}<a href="{{url_for('google_logout')}}">Logout</a>{% endblock %}
+{% block links %}<a href="{{url_for('google_logout')}}">Logout {{username}}</a>{% endblock %}
 {% block body %}
 	<header class="row">
         <section class="col-xs-6">

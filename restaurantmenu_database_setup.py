@@ -36,7 +36,8 @@ class Restaurant(Base):
     name = Column(String(80),
                   nullable=False)
     user_id = Column(Integer,
-                     ForeignKey('user.user_id'))
+                     ForeignKey('user.user_id'),
+                     nullable=False)
     user = relationship(User)
 
     @property
@@ -62,9 +63,9 @@ class MenuItem(Base):
     user_id = Column(Integer,
                      ForeignKey('user.user_id'))
     restaurant_id = Column(Integer,
-                           ForeignKey('restaurant.id'))
+                           ForeignKey('restaurant.id'),
+                           nullable=False)
     restaurant = relationship(Restaurant)
-    user = relationship(User)
 
     @property
     def serialize(self):
