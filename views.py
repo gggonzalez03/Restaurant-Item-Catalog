@@ -44,88 +44,6 @@ def get_user_by_id(user_id):
     return user
 
 
-# functions to interact with restaurant table
-# create functions
-def add_restaurant(restaurant_name):
-    """This will add a new restaurant in the database
-    :param restaurant_name: Name of the restaurant being added in String
-    :return: None
-    """
-    if isinstance(restaurant_name, str):
-        new_restaurant = Restaurant(name=restaurant_name)
-        session.add(new_restaurant)
-        session.commit()
-    else:
-        raise TypeError("Restaurant name must be of type String")
-
-
-# read functions
-def get_all_restaurants():
-    """This will return all the rows in the
-    restaurant table
-    :return: A list of tuples of restaurants
-    """
-    return session.query(Restaurant).all()
-
-
-def get_a_restaurant_by_id(restaurant_id):
-    """
-    Gets a single row from Restaurant table by id
-    :param restaurant_id: Id of the restaurant that is being retrieved
-    :return: A dictionary contains information about a restaurant
-    """
-    return session.query(Restaurant).filter_by(id=restaurant_id).first()
-
-
-# update functions
-def rename_a_restaurant(restaurant_id, restaurant_new_name):
-    """This will update the name of the given
-    restaurant
-    :param restaurant_new_name: New name to be set for the restaurant
-    :param restaurant_id: Id of the restaurant being renamed
-    :return: None
-    """
-    to_rename_restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
-    to_rename_restaurant.name = restaurant_new_name
-    session.add(to_rename_restaurant)
-    session.commit()
-
-
-# delete functions
-def delete_a_restaurant(restaurant_id):
-    """This will delete a specific row in the
-        database where the id is the given restaurant_id
-    :param restaurant_id: Id of the restaurant being deleted in Integer
-    :return: none
-    """
-    if isinstance(restaurant_id, int):
-        to_delete_restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
-        session.delete(to_delete_restaurant)
-        session.commit()
-    else:
-        raise TypeError("Restaurant Id must be of type Integer")
-
-
-# FUNCTIONS FOR INTERACTING WITH MENUITEM TABLE
-# create functions
-# read functions
-def get_all_menu():
-    return session.query(MenuItem).all()
-
-
-def get_menu_by_restaurant(restaurant_id):
-    """This will return the menu of a specific
-    restaurant
-
-    Args:
-        restaurant_id: Id of the restaurant
-    """
-    if isinstance(restaurant_id, int):
-        return session.query(MenuItem).filter_by(restaurant_id=restaurant_id)
-    else:
-        raise TypeError("Restaurant id must be an integer")
-
-
 # ALL VIEWS
 def login():
     if request.method == "POST":
@@ -252,7 +170,7 @@ def all_restaurants_view():
     Renders a template that shows all the restaurants
     :return: A rendered template that shows all the restaurants
     """
-    all_restaurants = get_all_restaurants()
+    all_restaurants = session.query(Restaurant).all()
     return render_template("restaurants.html", all_restaurants=all_restaurants)
 
 
@@ -310,8 +228,8 @@ def restaurant_menu(restaurant_id):
     :param restaurant_id: The id of the restaurant that we need the menu from
     :return: A template for viewing a restaurant's menu
     """
-    restaurant = get_a_restaurant_by_id(restaurant_id)
-    menu_by_restaurant = get_menu_by_restaurant(restaurant.id)
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
+    menu_by_restaurant = session.query(MenuItem).filter_by(restaurant_id=restaurant_id)
     return render_template("menu.html",
                            restaurant=restaurant,
                            items=menu_by_restaurant)
