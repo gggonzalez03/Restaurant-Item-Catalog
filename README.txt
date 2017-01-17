@@ -30,4 +30,6 @@
 	-this will log you in to the virtual machine that has been initialized
 7. Enter cd /vagrant
 	-Note that there is a '/' character before 'vagrant'
-8. Run main_project.py by entering 'python main_project.py'
+8. Run restaurantmenu_database_setup.py by entering 'python restaurantmenu_database_setup.py'
+9. Run restaurantmenu_data.py by entering 'python restaurantmenu_data.py'
+10. Run main_project.py by entering 'python main_project.py'
