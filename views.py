@@ -52,6 +52,9 @@ def login():
         # currently, I am working on the OAuth
         pass
     else:
+        if 'username' in login_session:
+            return redirect(url_for('all_restaurants_view'))
+
         state = "".join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
         login_session['state'] = state
         return render_template('login.html', STATE=state)
