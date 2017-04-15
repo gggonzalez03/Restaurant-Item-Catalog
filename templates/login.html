@@ -52,20 +52,92 @@
         <input id="loginpassword" type="password" name="loginpassword">
         <input type="submit" form="loginform" value="Log In">
     </form>-->
-    <!--GOOGLE SIGN IN BUTTON-->
-    <div id="signInButton">
-        <!--Profile is being used as scope instead of openid
-        because users that have no google plus will not give any username
-        or email address. This is according to developers.google.com-->
-        <span class="g-signin"
-              data-scope="profile email"
-              data-clientid="YOUR_CLIENT_ID_IN_HERE"
-              data-redirecturi="postmessage"
-              data-accesstype="offline"
-              data-cookiepolicy="single_host_origin"
-              data-callback="signInCallback"
-              data-approvalprompt="force">
-        </span>
+    <div id="login-page" class="row">
+        <div id="login-form" class="container">
+            <ul  class="nav nav-pills">
+                <li class="active">
+                    <a  href="#1a" data-toggle="tab">Login</a>
+                </li>
+                <li>
+                    <a href="#2a" data-toggle="tab">Sign Up</a>
+                </li>
+            </ul>
+
+            <div class="tab-content clearfix">
+                <div class="tab-pane active" id="1a">
+                    <form>
+                        <div class="form-group col-xs-12">
+                            <label for="user-email" class="sr-only">Email</label>
+                            <input type="email" class="form-control" id="user-email" placeholder="Email">
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label for="user-pw" class="sr-only">Password</label>
+                            <input type="password" class="form-control" id="user-pw" placeholder="Password">
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <button type="submit" id="login-btn" class="btn col-xs-12">Login</button>
+                        </div>
+                        <!--GOOGLE SIGN IN BUTTON-->
+                        <div id="signInButton" class="col-xs-12">
+                            <!--Profile is being used as scope instead of openid
+                            because users that have no google plus will not give any username
+                            or email address. This is according to developers.google.com-->
+                            <span class="g-signin"
+                                  data-scope="profile email"
+                                  data-clientid="YOUR_CLIENT_ID_IN_HERE"
+                                  data-redirecturi="postmessage"
+                                  data-accesstype="offline"
+                                  data-cookiepolicy="single_host_origin"
+                                  data-callback="signInCallback"
+                                  data-approvalprompt="force">
+                            </span>
+                        </div>
+                        <!--GOOGLE SIGN IN BUTTON END-->
+                    </form>
+                </div>
+                <div class="tab-pane" id="2a">
+                    <form>
+                        <div class="form-group col-sm-6">
+                            <label for="newuser-first" class="sr-only">First Name</label>
+                            <input type="email" class="form-control" id="newuser-first" placeholder="First Name">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="newuser-last" class="sr-only">Last Name</label>
+                            <input type="email" class="form-control" id="newuser-last" placeholder="Last Name">
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label for="newuser-email" class="sr-only">Email</label>
+                            <input type="email" class="form-control" id="newuser-email" placeholder="Email">
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label for="newuser-pw" class="sr-only">Password</label>
+                            <input type="password" class="form-control" id="newuser-pw" placeholder="Password">
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <button type="submit" id="signup-btn" class="btn col-xs-12">Sign Up</button>
+                        </div>
+
+                        <!--GOOGLE SIGN IN BUTTON-->
+                        <div id="signUpButton" class="col-xs-12">
+                            <!--Profile is being used as scope instead of openid
+                            because users that have no google plus will not give any username
+                            or email address. This is according to developers.google.com-->
+                            <span class="g-signin"
+                                  data-scope="profile email"
+                                  data-clientid="YOUR_CLIENT_ID_IN_HERE"
+                                  data-redirecturi="postmessage"
+                                  data-accesstype="offline"
+                                  data-cookiepolicy="single_host_origin"
+                                  data-callback="signInCallback"
+                                  data-approvalprompt="force">
+                            </span>
+                        </div>
+                        <!--GOOGLE SIGN IN BUTTON END-->
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="result"></div>
     </div>
-    <div id="result"></div>
+
 {% endblock %}
