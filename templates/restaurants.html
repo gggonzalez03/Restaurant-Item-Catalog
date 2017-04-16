@@ -2,16 +2,15 @@
 {% block pagetitle %}Restaurant{% endblock %}
 {% block links %}<a href="{{url_for('google_logout')}}">Logout {{logged_in_user.name}}</a>{% endblock %}
 {% block body %}
-	<header class="row">
+	<!--<header id="" class="row">
         <section class="col-xs-6">
             <h1>Restaurants<a href="{{url_for('add_restaurant')}}"><button class="btn addbutton">+</button></a></h1>
         </section>
-    </header>
-    <main class="row">
-        <section class="col-xs-12 col-sm-8 col-sm-offset-1">
-            <table class="table table-hover">
-            {% for restaurant in all_restaurants %}
-                <tr>
+    </header>-->
+    <a class="btn addbutton" href="{{url_for('add_restaurant')}}"><img src="{{url_for('static', filename='img/add.svg')}}"/></a>
+    <main id="rest-cards" class="row">
+        {% for restaurant in all_restaurants %}
+                <!--<tr>
                     <td>
                         <h2><a href="{{url_for('restaurant_menu', restaurant_id=restaurant.id)}}">{{restaurant.name}}</a></h2>
                     </td>
@@ -21,9 +20,22 @@
                         <a href="{{url_for('delete_restaurant', restaurant_id=restaurant.id)}}">✕</a>
                     </td>
                     {% endif %}
-                </tr>
-            {% endfor %}
-            </table>
-        </section>
+                </tr>-->
+        <div class="card hovercard col-xs-12 col-md-3">
+            <img src="http://placehold.it/300x200/000000/&text=Header" alt=""/>
+            <div class="avatar">
+                <img src="http://placehold.it/80X80/333333/&text=Logo" alt=""/>
+            </div>
+            <div class="info">
+                <div class="title">
+                    {{restaurant.name}}
+                </div>
+                <div class="desc">{{restaurant.user.name}}</div>
+            </div>
+            <div class="bottom">
+                <a class="btn btn-default" href="{{url_for('restaurant_menu', restaurant_id=restaurant.id)}}">View Menu</a>
+            </div>
+        </div>
+        {% endfor %}
     </main>
 {% endblock %}
