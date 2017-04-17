@@ -1,6 +1,29 @@
 {% extends "base.html" %}
 {% block pagetitle %}Restaurant{% endblock %}
-{% block links %}<a href="{{url_for('google_logout')}}">Logout {{logged_in_user.name}}</a>{% endblock %}
+{% block links %}<!--<a href="{{url_for('google_logout')}}">Logout {{logged_in_user.name}}</a>-->
+<li class="dropdown pull-right"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Account
+    <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li>
+            <div class="navbar-content">
+                <div class="row">
+
+                </div>
+            </div>
+            <div class="navbar-footer">
+                <div class="navbar-footer-content">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <img id="prof-photo" src="{{logged_in_user.picture}}" />
+                            <a href="{{url_for('google_logout')}}" class="btn btn-default">Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</li>
+{% endblock %}
 {% block body %}
 	<!--<header id="" class="row">
         <section class="col-xs-6">
