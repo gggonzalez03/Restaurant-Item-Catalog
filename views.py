@@ -45,6 +45,15 @@ def get_user_by_id(user_id):
     return user
 
 
+def get_menu_by_restaurant(restaurant_id):
+    menu = session.query(MenuItem).filter_by(restaurant_id=restaurant_id)
+    items = []
+    for item in menu:
+        items.append(item.serialize)
+
+    return items
+
+
 # ALL VIEWS
 def login():
     if request.method == "POST":
