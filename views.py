@@ -51,7 +51,7 @@ def get_menu_by_restaurant(restaurant_id):
     for item in menu:
         items.append(item.serialize)
 
-    return items
+    return jsonify(results=items)
 
 
 # ALL VIEWS

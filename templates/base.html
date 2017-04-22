@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="catalog">
 	<head>
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
         {% block script %}{% endblock %}
 	</head>
 	<body>
-		<div class="container-fluid">
+		<div class="container-fluid" ng-controller="CatalogController as cc">
 			<header id="site-header" class="row">
 				<h1 class="col-md-6">Dinners</h1>
 				<nav id="site-nav" class="col-md-6 nav navbar-nav">{% block links %}{% endblock %}</nav>
@@ -22,5 +22,7 @@
 			{% block body %}
 			{% endblock %}
 		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+		<script src="{{url_for('static', filename='js/main.js')}}"></script>
 	</body>
 </html>

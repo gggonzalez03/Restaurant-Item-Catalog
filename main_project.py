@@ -27,6 +27,10 @@ app.add_url_rule('/restaurants',
                  view_func=views.all_restaurants_view,
                  methods=methods)
 
+# Show all restaurants
+app.add_url_rule('/restaurant/menu/<int:restaurant_id>',
+                 view_func=views.get_menu_by_restaurant,
+                 methods=methods)
 # Show form to add a new restaurant
 app.add_url_rule("/restaurants/add",
                  view_func=views.add_restaurant,
