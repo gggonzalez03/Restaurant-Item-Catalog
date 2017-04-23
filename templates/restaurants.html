@@ -70,11 +70,19 @@
                         <div class="modal-body">
                             {% raw %}
                             <div ng-repeat="menu in restaurant_menu">
-                                <p ng-repeat="item in menu">{{item}}</p>
+                                <div class="menu-item" ng-repeat="item in menu">
+                                    <h4>{{item.name}}</h4>
+                                    <p>{{item.description}}</p>
+                                    <p>{{item.price}}</p>
+                                    <hr/>
+                                </div>
                             </div>
                             {% endraw %}
                         </div>
                         <div class="modal-footer">
+                            {% if restaurant.user.user_id == logged_in_user.user_id %}
+                            <a type="button" class="btn btn-default" href="{{url_for('add_menu_item', restaurant_id=restaurant.id)}}">Add Item</a>
+                            {% endif %}
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>

@@ -197,6 +197,10 @@
          -moz-box-sizing: border-box;
               box-sizing: border-box;
     }
+
+    .menu-item {
+        text-align: left;
+    }
 }
 
 /* Extra Small Devices, Phones */
