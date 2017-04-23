@@ -69,13 +69,15 @@
                         </div>
                         <div class="modal-body">
                             {% raw %}
-                            <div ng-repeat="menu in restaurant_menu">
-                                <div class="menu-item" ng-repeat="item in menu">
-                                    <h4>{{item.name}}</h4>
-                                    <p>{{item.description}}</p>
-                                    <p>{{item.price}}</p>
-                                    <hr/>
+                            <div class="menu-item" ng-repeat="menu in restaurant_menu">
+                                <h4>{{menu.name}}</h4>
+                                <p>{{menu.description}}</p>
+                                <p>{{menu.price}}</p>
+                                <div class="item-update-buttons" ng-init="cc.is_item_owned(menu.id)">
+                                    <p ng-if="is_owned">✕</p>
+                                    <p ng-if="is_owned">✎</p>
                                 </div>
+                                <hr/>
                             </div>
                             {% endraw %}
                         </div>

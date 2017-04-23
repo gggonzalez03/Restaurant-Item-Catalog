@@ -54,6 +54,14 @@ def get_menu_by_restaurant(restaurant_id):
     return jsonify(results=items)
 
 
+def is_item_owned(menu_item_id):
+    item = session.query(MenuItem).filter_by(id=menu_item_id).one()
+    if login_session['email'] == item.restaurant.user.email:
+        return jsonify(results=[{"answer": True}])
+
+    return jsonify(results=[{"answer": False}])
+
+
 # ALL VIEWS
 def login():
     if request.method == "POST":

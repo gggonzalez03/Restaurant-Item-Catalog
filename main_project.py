@@ -31,6 +31,8 @@ app.add_url_rule('/restaurants',
 app.add_url_rule('/restaurant/menu/<int:restaurant_id>',
                  view_func=views.get_menu_by_restaurant,
                  methods=methods)
+
+
 # Show form to add a new restaurant
 app.add_url_rule("/restaurants/add",
                  view_func=views.add_restaurant,
@@ -77,6 +79,12 @@ app.add_url_rule('/restaurants/<int:restaurant_id>/menu/JSON',
 # Get JSON formatted details of an item in a menu of a restaurant
 app.add_url_rule('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON',
                  view_func=views.restaurant_menu_item_json,
+                 methods=methods)
+
+# Get JSON formatted response asking question "Is the logged in user the owner of
+# a particular menu_item in a restaurant"
+app.add_url_rule('/restaurant/menu/<int:menu_item_id>/isowned',
+                 view_func=views.is_item_owned,
                  methods=methods)
 
 if __name__ == '__main__':

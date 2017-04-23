@@ -199,7 +199,14 @@
     }
 
     .menu-item {
+        position: relative;
         text-align: left;
+    }
+
+    .item-update-buttons {
+        position: absolute;
+        top: 0;
+        right: 0;
     }
 }
 
