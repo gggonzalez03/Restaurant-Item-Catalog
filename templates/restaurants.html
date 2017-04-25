@@ -31,7 +31,7 @@
         </section>
     </header>-->
     <a class="btn addbutton" href="{{url_for('add_restaurant')}}"><img src="{{url_for('static', filename='img/add.svg')}}"/></a>
-    <main id="rest-cards" class="row">
+    <main id="rest-cards" class="row whole-page-template">
         {% for restaurant in all_restaurants %}
                 <!--<tr>
                     <td>
