@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block pagetitle %}Edit Restaurant{% endblock %}
 {% block body %}
-    <form id="editrestaurantform" method="post" action="{{url_for('edit_restaurant', restaurant_id=restaurant_id)}}">
-        <input type="text" name="restaurantnewname" placeholder="{{restaurant_to_edit_name}}">
-        <input type="submit" form="editrestaurantform">
-    </form>
+    <main class="whole-page-template">
+        <form id="editrestaurantform" method="post" action="{{url_for('edit_restaurant', restaurant_id=restaurant_id)}}">
+            <input type="text" name="restaurantnewname" placeholder="{{restaurant_to_edit_name}}">
+            <input type="submit" form="editrestaurantform">
+        </form>
+    </main>
 {% endblock %}

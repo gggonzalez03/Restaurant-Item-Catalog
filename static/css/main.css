@@ -13,6 +13,12 @@
 	    margin-top: 10px;
 	}
 
+	.whole-page-template {
+        padding-top: 10vh;
+        padding-left: 4vw;
+        padding-right: 4vw;
+    }
+
 	.btn {
 	    background-color: transparent;
 	}
@@ -103,12 +109,6 @@
 
 
     /*Home page*/
-    #rest-cards {
-        padding-top: 10vh;
-        padding-left: 4vw;
-        padding-right: 4vw;
-    }
-
     .card {
       padding-top: 20px;
       margin: 4vh 2vw 1vh 2vw;

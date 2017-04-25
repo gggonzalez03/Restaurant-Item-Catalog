@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 {% block pagetitle %}New Item{% endblock %}
 {% block body %}
-    <form id="addmenuitemform" action="{{url_for('add_menu_item', restaurant_id=restaurant_id)}}" method="post">
-        <label for="additemname">Name: </label>
-        <input id="additemname" type="text" name="additemname">
+    <main class="whole-page-template">
+        <form id="addmenuitemform" action="{{url_for('add_menu_item', restaurant_id=restaurant_id)}}" method="post">
+            <label for="additemname">Name: </label>
+            <input id="additemname" type="text" name="additemname">
 
-        <label for="additemprice">Price: </label>
-        <input id="additemprice" type="text" name="additemprice">
+            <label for="additemprice">Price: </label>
+            <input id="additemprice" type="text" name="additemprice">
 
-        <label for="additemdescription">Description: </label>
-        <input id="additemdescription" type="text" name="additemdescription">
+            <label for="additemdescription">Description: </label>
+            <input id="additemdescription" type="text" name="additemdescription">
 
-        <select name="additemcourse">
-            <option value="Appetizer">Appetizer</option>
-            <option value="Fish Cours">Fish Course</option>
-            <option value="Entree">Entree</option>
-            <option value="Dessert">Dessert</option>
-        </select>
-        <input type="submit" form="addmenuitemform">
-    </form>
+            <select name="additemcourse">
+                <option value="Appetizer">Appetizer</option>
+                <option value="Fish Cours">Fish Course</option>
+                <option value="Entree">Entree</option>
+                <option value="Dessert">Dessert</option>
+            </select>
+            <input type="submit" form="addmenuitemform">
+        </form>
+    </main>
 {% endblock %}
