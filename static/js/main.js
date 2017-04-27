@@ -1,4 +1,7 @@
-angular.module('catalog', [])
+angular.module('catalog', [], function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[{');
+    $interpolateProvider.endSymbol('}]');
+})
   .controller('CatalogController', function($scope, $http) {
     var catalog = this;
     $scope.restaurant_menu;

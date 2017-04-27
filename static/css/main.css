@@ -13,6 +13,10 @@
 	    margin-top: 10px;
 	}
 
+	a:hover {
+	    text-decoration: none;
+	}
+
 	.whole-page-template {
         padding-top: 10vh;
         padding-left: 4vw;
@@ -207,6 +211,15 @@
         position: absolute;
         top: 0;
         right: 0;
+        color: black;
+    }
+
+    .item-update-buttons > a {
+        color: gray;
+    }
+
+    .item-update-buttons > a:hover {
+        color: black;
     }
 }
 
