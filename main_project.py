@@ -87,6 +87,14 @@ app.add_url_rule('/restaurant/menu/<int:menu_item_id>/isowned',
                  view_func=views.is_item_owned,
                  methods=methods)
 
+app.add_url_rule('/restaurant/<int:restaurant_id>/isowned',
+                 view_func=views.is_rest_owned,
+                 methods=methods)
+
+app.add_url_rule('/restaurants/JSON',
+                 view_func=views.get_all_restaurants,
+                 methods=methods)
+
 if __name__ == '__main__':
     app.secret_key = "secret key"
     app.debug = True

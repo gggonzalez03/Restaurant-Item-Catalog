@@ -61,6 +61,22 @@ def is_item_owned(menu_item_id):
 
     return jsonify(results=[{"answer": False}])
 
+def is_rest_owned(restaurant_id):
+    item = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    if login_session['email'] == item.user.email:
+        return jsonify(results=[{"answer": True}])
+
+    return jsonify(results=[{"answer": False}])
+
+
+def get_all_restaurants():
+    all_restaurants = session.query(Restaurant).all()
+    items = []
+    for item in all_restaurants:
+        items.append(item.serialize)
+
+    return jsonify(results=items)
+
 
 # ALL VIEWS
 def login():

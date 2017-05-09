@@ -6,6 +6,16 @@ angular.module('catalog', [], function($interpolateProvider) {
     var catalog = this;
     $scope.restaurant_menu;
     $scope.is_owned;
+    $scope.is_rest_owned;
+    $scope.all_restaurants;
+
+    catalog.get_all_restaurants = function(){
+      $scope.all_restaurants = "";
+      $http.get("/restaurants/JSON")
+      .then(function(data){
+        $scope.all_restaurants = data.data.results;
+      });
+    }
 
     catalog.get_menu_by_restaurant = function(restaurant_id){
         $scope.restaurant_menu = "";
@@ -20,6 +30,14 @@ angular.module('catalog', [], function($interpolateProvider) {
     	$http.get("/restaurant/menu/" + item_id + "/isowned")
     	.then(function(data){
     	    $scope.is_owned = data.data.results[0].answer;
+    	});
+    };
+
+    catalog.is_rest_owned = function(restaurant_id){
+        $scope.is_rest_owned = "";
+    	$http.get("/restaurant/" + restaurant_id + "/isowned")
+    	.then(function(data){
+    	    $scope.is_rest_owned = data.data.results[0].answer;
     	});
     };
   });
