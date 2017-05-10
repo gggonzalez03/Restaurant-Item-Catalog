@@ -2,7 +2,7 @@ angular.module('catalog', [], function($interpolateProvider) {
     $interpolateProvider.startSymbol('[{');
     $interpolateProvider.endSymbol('}]');
 })
-  .controller('CatalogController', function($scope, $http) {
+  .controller('CatalogController', function($scope, $http, $window) {
     var catalog = this;
     $scope.restaurant_menu;
     $scope.is_owned;
@@ -40,4 +40,12 @@ angular.module('catalog', [], function($interpolateProvider) {
     	    $scope.is_rest_owned = data.data.results[0].answer;
     	});
     };
+
+    catalog.delete_menu_item = function(restaurant_id, menu_id){
+      $window.location.href = "/restaurants/"+restaurant_id+"/"+menu_id+"/delete";
+    }
+
+    catalog.edit_menu_item = function(restaurant_id, menu_id){
+      $window.location.href = "/restaurants/"+restaurant_id+"/"+menu_id+"/edit";
+    }
   });

@@ -73,8 +73,8 @@
                                 <p>[{menu.description}]</p>
                                 <p>[{menu.price}]</p>
                                 <div class="item-update-buttons" ng-init="cc.is_item_owned(menu.id)">
-                                    <a ng-if="is_owned" href="{{url_for('edit_restaurant', restaurant_id=restaurant.id)}}">✎</a>
-                                    <a ng-if="is_owned" href="{{url_for('delete_restaurant', restaurant_id=restaurant.id)}}">✕</a>
+                                    <a ng-if="is_owned" ng-click="cc.edit_menu_item({{restaurant.id}}, menu.id)">✎</a>
+                                    <a ng-if="is_owned" ng-click="cc.delete_menu_item({{restaurant.id}}, menu.id)">✕</a>
                                 </div>
                                 <hr/>
                             </div>
