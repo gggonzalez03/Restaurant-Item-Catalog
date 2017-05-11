@@ -256,6 +256,7 @@ def delete_restaurant(restaurant_id):
     if 'username' not in login_session:
         return redirect(url_for('login'))
     restaurant_to_be_deleted = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    menu_to_be_deleted = session.query(MenuItem).filter_by(restaurant_id=restaurant_id).all()
     user_id = get_user_by_email(login_session['email']).user_id
 
     # return an error if the user is trying to edit a restaurant
@@ -268,6 +269,10 @@ def delete_restaurant(restaurant_id):
     if request.method == "POST":
         if request.form["todeleterestaurant"] == "Yes":
             session.delete(restaurant_to_be_deleted)
+
+            for item in menu_to_be_deleted:
+                session.delete(item)
+
             session.commit()
             return redirect(url_for("all_restaurants_view"))
         else:
