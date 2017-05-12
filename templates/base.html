@@ -16,7 +16,7 @@
 	<body>
 		<div class="container-fluid" ng-controller="CatalogController as cc">
 			<header id="site-header" class="row">
-				<h1 class="col-md-6">Dinners</h1>
+				<h1 class="col-md-6" id="app-name"><a href="{{url_for('all_restaurants_view')}}">Dinners</a></h1>
 				<nav id="site-nav" class="col-md-6 nav navbar-nav">{% block links %}{% endblock %}</nav>
 			</header>
 			{% block body %}
